@@ -9,7 +9,7 @@ Installation
 ------------
 
 1. Add this line to layman.cfg:
-	https://raw.github.com/oskar456/oskaroverlay/master/oskaroverlay.xml
-
-2. Run `layman -a oskaroverlay`
+    https://raw.github.com/oskar456/oskaroverlay/master/oskaroverlay.xml
+2. Fetch list of overlays using `layman -f`
+3. Run `layman -a oskaroverlay`
 
