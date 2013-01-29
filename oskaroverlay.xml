@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories version="1.0">
+  <repo priority="50" quality="experimental" status="unofficial">
+    <name>oskaroverlay</name>
+    <description>My personal Gentoo portage overlay</description>
+    <homepage>https://github.com/oskar456/oskaroverlay</homepage>
+    <owner>
+      <email>ondrej@caletka.cz</email>
+      <name>Ondrej Caletka</name>
+    </owner>
+    <source type="git">git://github.com/oskar456/oskaroverlay.git</source>
+  </repo>
+</repositories>
