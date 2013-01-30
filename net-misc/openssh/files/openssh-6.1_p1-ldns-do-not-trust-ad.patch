@@ -1,15 +1,15 @@
-From 5dbfe9b059b6297a1386c96f3eda5efa67da1756 Mon Sep 17 00:00:00 2001
+From b2530e2214ad84a5606042a9003993429848ba6d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Ond=C5=99ej=20Caletka?= <ondrej@caletka.cz>
 Date: Tue, 11 Sep 2012 14:48:48 +0200
-Subject: [PATCH 4/4] Do not trust AD flag when using ldns
+Subject: [PATCH 4/5] Do not trust AD flag when using ldns
 
 Instead of relying on (possibly spoofed) AD flag from upstream DNS
 server, try to validate DNSSEC autonomously.
 For this to work, the trust anchor have to be configured in /etc/resolv.conf:
 anchor /path/to/root.key
 ---
- openbsd-compat/getrrsetbyname-ldns.c |   43 +++++++++++++++------------------
- 1 files changed, 20 insertions(+), 23 deletions(-)
+ openbsd-compat/getrrsetbyname-ldns.c | 43 +++++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
 diff --git a/openbsd-compat/getrrsetbyname-ldns.c b/openbsd-compat/getrrsetbyname-ldns.c
 index 1966634..b89d2e9 100644
@@ -69,5 +69,5 @@ index 1966634..b89d2e9 100644
  	rrset->rri_rdatas = calloc(rrset->rri_nrdatas,
  	   sizeof(struct rdatainfo));
 -- 
-1.7.8.6
+1.7.12.4
 

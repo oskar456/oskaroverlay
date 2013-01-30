@@ -1,17 +1,17 @@
-From e13bf86f3a24a6add090cb2dedefc23a29a8a934 Mon Sep 17 00:00:00 2001
+From 4920df03bc153bac6ddbcc608f87f49a02201591 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Ond=C5=99ej=20Caletka?= <ondrej@caletka.cz>
 Date: Tue, 11 Sep 2012 22:36:48 +0200
-Subject: [PATCH] Added hardcoded trust anchor
+Subject: [PATCH 5/5] Added hardcoded trust anchor
 
 This patch adds a hardcoded trust anchor into getrrsetbyname-ldns.c.
 Therefore it is possible to do DNSSEC validation without any external
 dependencies.
 ---
- openbsd-compat/getrrsetbyname-ldns.c |   24 +++++++++++++++++++++++-
- 1 files changed, 23 insertions(+), 1 deletions(-)
+ openbsd-compat/getrrsetbyname-ldns.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/openbsd-compat/getrrsetbyname-ldns.c b/openbsd-compat/getrrsetbyname-ldns.c
-index b89d2e9..278e666 100644
+index b89d2e9..d489cfe 100644
 --- a/openbsd-compat/getrrsetbyname-ldns.c
 +++ b/openbsd-compat/getrrsetbyname-ldns.c
 @@ -60,6 +60,13 @@
@@ -28,7 +28,7 @@ index b89d2e9..278e666 100644
  int
  getrrsetbyname(const char *hostname, unsigned int rdclass,
  	       unsigned int rdtype, unsigned int flags,
-@@ -160,9 +167,24 @@ getrrsetbyname(const char *hostname, unsigned int rdclass,
+@@ -160,6 +167,21 @@ getrrsetbyname(const char *hostname, unsigned int rdclass,
  	debug2("ldns: got %u signature(s) (RRTYPE %u) from DNS",
  	       rrset->rri_nsigs, LDNS_RR_TYPE_RRSIG);
  
@@ -49,11 +49,7 @@ index b89d2e9..278e666 100644
 +
  	if ((err = ldns_verify_trusted(ldns_res, rrdata, rrsigs,
  	     trusted_keys)) == LDNS_STATUS_OK) {
--		rrset->rri_flags |= RRSET_VALIDATED;
-+	     rrset->rri_flags |= RRSET_VALIDATED;
- 		debug2("ldns: RRset is signed with a valid key");
- 	} else {
- 		debug2("ldns: RRset validation failed: %s",
+ 		rrset->rri_flags |= RRSET_VALIDATED;
 -- 
-1.7.8.6
+1.7.12.4
 

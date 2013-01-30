@@ -1,14 +1,14 @@
-From 58ba847079d95e8a4e55026c440ee64594622531 Mon Sep 17 00:00:00 2001
+From 2c211682085be274b8dc4aeea44c83fc70d2dea2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Ond=C5=99ej=20Caletka?= <ondrej@caletka.cz>
 Date: Fri, 31 Aug 2012 11:04:17 +0200
-Subject: [PATCH 3/3] Check for SSHFP when certificate is offered
+Subject: [PATCH 3/5] Check for SSHFP when certificate is offered
 
 When the sshd offer a certificate to client (which is default, when such
 a certificate is configured), the client matches SSHFP records
 against the public key embedded in the certificate.
 ---
- sshconnect.c |   27 ++++++++++++++++++---------
- 1 files changed, 18 insertions(+), 9 deletions(-)
+ sshconnect.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/sshconnect.c b/sshconnect.c
 index 0ee7266..ff98815 100644
@@ -64,5 +64,5 @@ index 0ee7266..ff98815 100644
  	}
  
 -- 
-1.7.8.6
+1.7.12.4
 
