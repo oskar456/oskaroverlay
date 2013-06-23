@@ -1,0 +1,14 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 8d89aa2..9147dcc 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,7 +1,8 @@
+ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
+ SUBDIRS = . tests
+ 
+-sbin_PROGRAMS = knotc knotd kdig khost knsupdate
++sbin_PROGRAMS = knotc knotd
++bin_PROGRAMS = kdig khost knsupdate
+ noinst_PROGRAMS = zscanner-tool
+ noinst_LTLIBRARIES = libknot.la libknotd.la libknots.la libzscanner.la
+ 

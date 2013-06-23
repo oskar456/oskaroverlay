@@ -1,0 +1,24 @@
+--- a/src/knot/conf/conf.c
++++ b/src/knot/conf/conf.c
+@@ -171,7 +171,7 @@ static int conf_process(conf_t *conf)
+ 
+ 	// Create PID file
+ 	if (conf->pidfile == NULL) {
+-		conf->pidfile = strcdup(conf->storage, "/" PID_FILE);
++		conf->pidfile = strdup(PID_FILE);
+ 		if (conf->pidfile == NULL) {
+ 			return KNOT_ENOMEM;
+ 		}
+diff --git a/src/knot/knot.h b/src/knot/knot.h
+index fb0f9fd..e144db9 100644
+--- a/src/knot/knot.h
++++ b/src/knot/knot.h
+@@ -36,7 +36,7 @@
+ 
+ #define PROJECT_EXENAME "knotd"
+ #define PROJECT_EXEC SBINDIR "/" PROJECT_EXENAME /*!< \brief  Project executable. */
+-#define PID_FILE "knot.pid" /*!< \brief Server PID file name. */
++#define PID_FILE "/var/run/knot.pid" /*!< \brief Server PID file name. */
+ 
+ /*
+  * Server.
