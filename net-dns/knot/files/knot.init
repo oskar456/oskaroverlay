@@ -5,10 +5,6 @@ depend() {
 }
 
 check_config() {
-	# we need to ensure that var is created for runtime
-	if [ ! -d /var/lib/knot/ ]; then
-		mkdir -p /var/lib/knot/
-	fi
 	# without config dns is kinda useless
 	if [ ! -f /etc/knot/knot.conf ]; then
 		eerror "This script requires configured knot-dns at /etc/knot/knot.conf."
@@ -18,6 +14,8 @@ check_config() {
 
 start() {
 	check_config || return 1
+	checkpath -d -q -m 0750 -o knot:knot /var/run/knot/
+	checkpath -d -q -m 0750 -o knot:knot /var/lib/knot/
 
 	ebegin "Starting knot-dns"
 	/usr/sbin/knotd -d
