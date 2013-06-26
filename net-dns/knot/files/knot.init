@@ -1,37 +1,37 @@
 #!/sbin/runscript
 
+command=/usr/sbin/knotd
+command_args="-d"
+pidfile=/var/run/knot/knot.pid
+required_files=/etc/knot/knot.conf
+extra_started_commands="reload"
+description_reload="Reload configuration and changed zones."
+
 depend() {
 	need net
 }
 
-check_config() {
-	# without config dns is kinda useless
-	if [ ! -f /etc/knot/knot.conf ]; then
-		eerror "This script requires configured knot-dns at /etc/knot/knot.conf."
-		return 1
-	fi
-}
-
 start() {
-	check_config || return 1
-	checkpath -d -q -m 0750 -o knot:knot /var/run/knot/
-	checkpath -d -q -m 0750 -o knot:knot /var/lib/knot/
+	checkpath -d -m 0750 -o knot:knot /var/run/knot/ /var/lib/knot/
 
 	ebegin "Starting knot-dns"
-	/usr/sbin/knotd -d
+	start-stop-daemon --start \
+		--pidfile $pidfile --exec $command -- $command_args
 	eend $?
 }
 
 stop() {
 	ebegin "Stoping knot-dns"
-	/usr/sbin/knotc stop
-	eend $?
-}
-
-restart() {
-	ebegin "Restarting knot-dns"
-	/usr/sbin/knotc restart
-	eend $?
+	/usr/sbin/knotc stop >/dev/null 2>&1
+	# In case remote control is not working
+	if [ "$?" != 0 ]; then
+		if [ -f $pidfile ]; then
+			start-stop-daemon --stop --pidfile $pidfile
+		else
+			ewarn "No pidfile found, knotd is probably not running anymore."
+		fi
+	fi
+	ewend $?
 }
 
 reload() {
