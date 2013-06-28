@@ -39,6 +39,7 @@ src_configure() {
 	econf \
 		--sysconfdir="${EPREFIX}/etc/${PN}" \
 		--libexecdir="${EPREFIX}/usr/libexec/${PN}" \
+		--with-storage="${EPREFIX}/var/lib/${PN}" \
 		--with-rundir="${EPREFIX}/var/run/${PN}" \
 		--disable-lto \
 		--enable-recvmmsg \
@@ -49,8 +50,7 @@ src_configure() {
 
 src_install() {
 	default
-
-	newinitd "${FILESDIR}/knot.init" knot-dns
+	newinitd "${FILESDIR}/knot.init" knot
 }
 
 pkg_postinst() {

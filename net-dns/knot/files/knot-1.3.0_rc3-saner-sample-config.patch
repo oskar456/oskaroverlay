@@ -1,11 +1,11 @@
 diff --git a/samples/knot.sample.conf.in b/samples/knot.sample.conf.in
-index 225fbc5..47c7469 100644
+index 5ef43bc..e7e44be 100644
 --- a/samples/knot.sample.conf.in
 +++ b/samples/knot.sample.conf.in
-@@ -8,10 +8,26 @@
+@@ -7,10 +7,12 @@
+ 
  system {
    identity "@package@ @version@";
-   storage "@localstatedir@/@package@";
 +  user knot.knot;
  }
  
@@ -13,20 +13,6 @@ index 225fbc5..47c7469 100644
 -  my-iface { address 127.0.0.1@53533; }
 +  all_v4 { address 0.0.0.0@53; }
 +  all_v6 { address [::]@53; }
-+}
-+
-+keys {
-+  # Replace with your own shared secret!
-+  knotc-key hmac-md5 "Wg==";
-+}
-+
-+remotes {
-+  ctl { address 127.0.0.1; key knotc-key; }
-+}
-+
-+control {
-+  listen-on { address 127.0.0.1; }
-+  allow ctl;
  }
  
  zones {

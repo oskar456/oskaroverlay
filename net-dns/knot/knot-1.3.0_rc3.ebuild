@@ -31,9 +31,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/_/-}"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-move-pidfile-to-var.patch
-	epatch "${FILESDIR}"/${P}-move-utilities-to-bin.patch
-	epatch "${FILESDIR}"/${P}-saner-sample-config.patch
+	epatch "${FILESDIR}/${P}-saner-sample-config.patch"
 	sed -i \
 		-e 's:-Werror::g' \
 		configure.ac || die
@@ -44,6 +42,8 @@ src_configure() {
 	econf \
 		--sysconfdir="${EPREFIX}/etc/${PN}" \
 		--libexecdir="${EPREFIX}/usr/libexec/${PN}" \
+		--with-storage="${EPREFIX}/var/lib/${PN}" \
+		--with-rundir="${EPREFIX}/var/run/${PN}" \
 		--disable-lto \
 		--enable-recvmmsg \
 		$(use_enable fastparser) \
@@ -53,8 +53,7 @@ src_configure() {
 
 src_install() {
 	default
-
-	newinitd "${FILESDIR}/knot.init" knot-dns
+	newinitd "${FILESDIR}/knot.init" knot
 }
 
 pkg_postinst() {
