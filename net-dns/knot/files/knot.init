@@ -14,14 +14,14 @@ depend() {
 start() {
 	checkpath -d -m 0750 -o knot:knot /var/run/knot/ /var/lib/knot/
 
-	ebegin "Starting knot-dns"
+	ebegin "Starting knot"
 	start-stop-daemon --start \
 		--pidfile $pidfile --exec $command -- $command_args
 	eend $?
 }
 
 stop() {
-	ebegin "Stoping knot-dns"
+	ebegin "Stoping knot"
 	/usr/sbin/knotc stop >/dev/null 2>&1
 	# In case remote control is not working
 	if [ "$?" != 0 ]; then
@@ -35,7 +35,7 @@ stop() {
 }
 
 reload() {
-	ebegin "Reloading knot-dns"
-	/usr/sbin/knotc reload
+	ebegin "Reloading knot"
+	/usr/sbin/knotc reload >/dev/null
 	eend $?
 }
