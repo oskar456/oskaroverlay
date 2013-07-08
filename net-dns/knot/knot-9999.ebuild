@@ -37,9 +37,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--sysconfdir="${EPREFIX}/etc/${PN}" \
-		--libexecdir="${EPREFIX}/usr/libexec/${PN}" \
-		--with-storage="${EPREFIX}/var/lib/${PN}" \
+		--sharedstatedir="${EPREFIX}/var/lib" \
 		--with-rundir="${EPREFIX}/var/run/${PN}" \
 		--disable-lto \
 		--enable-recvmmsg \
