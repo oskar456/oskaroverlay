@@ -37,7 +37,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--sharedstatedir="${EPREFIX}/var/lib" \
+		--with-storage="${EPREFIX}/var/lib/${PN}" \
 		--with-rundir="${EPREFIX}/var/run/${PN}" \
 		--disable-lto \
 		--enable-recvmmsg \
