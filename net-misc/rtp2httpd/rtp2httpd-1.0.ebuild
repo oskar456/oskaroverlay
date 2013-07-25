@@ -17,6 +17,6 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_install() {
-	defaults
+	default
 	newinitd "${FILESDIR}/rtp2httpd.init" rtp2httpd
 }
