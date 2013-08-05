@@ -31,7 +31,6 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/_/-}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-saner-sample-config.patch"
 	sed -i \
 		-e 's:-Werror::g' \
 		configure.ac || die
@@ -40,8 +39,6 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--sysconfdir="${EPREFIX}/etc/${PN}" \
-		--libexecdir="${EPREFIX}/usr/libexec/${PN}" \
 		--with-storage="${EPREFIX}/var/lib/${PN}" \
 		--with-rundir="${EPREFIX}/var/run/${PN}" \
 		--disable-lto \
