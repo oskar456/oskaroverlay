@@ -54,10 +54,4 @@ src_install() {
 pkg_postinst() {
 	enewgroup knot 53
 	enewuser knot 53 -1 /var/lib/knot knot
-	if [[ -n ${REPLACING_VERSIONS} ]] ; then
-		elog "Remember to recompile all zones after update. Run:"
-		elog "    # knotc stop"
-		elog "    # knotc compile"
-		elog "    # knotd -d"
-	fi
 }
