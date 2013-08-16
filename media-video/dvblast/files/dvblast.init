@@ -1,0 +1,38 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+INSTANCE="${SVCNAME#*.}"
+PIDPATH=/var/run/dvblast
+PIDFILE=${PIDPATH}/${INSTANCE}.pid
+COMMAND=/usr/bin/dvblast
+
+depend() {
+	need net
+}
+
+start() {
+	if [ "${SVCNAME}" = "dvblast" ]; then
+		eerror "You are not supposed to run this script directly. Create a symlink"
+		eerror "dvblast.instance for specific instance you want to run."
+		return 1
+	fi
+
+	if [ -z "${dvblast_CMDLINE}" ]; then
+		eerror "You must specify dvblast_CMDLINE in /etc/conf.d/${SVCNAME}"
+		return 1
+	fi
+
+	checkpath -q -d -m 700 -o nobody:nobody ${PIDPATH}
+	ebegin "Starting dvblast instance ${INSTANCE}"
+	start-stop-daemon --start --pidfile ${PIDFILE} --background --make-pidfile \
+			  --user nobody:nobody --exec ${COMMAND} -- ${dvblast_CMDLINE}
+	eend ${?}
+}
+
+stop() {
+	ebegin "Stopping dvblast instance ${INSTANCE}"
+	start-stop-daemon --stop --pidfile ${PIDFILE}
+	eend ${?}
+}
