@@ -1,0 +1,12 @@
+#!/sbin/runscript
+
+depend() {
+        need net
+}
+
+description="Simple SAP announcment generator"
+command=/usr/bin/sapserver
+command_background=yes
+pidfile=/var/run/sapserver.pid
+start_stop_daemon_args="-u nobody:nobody"
+command_args=">/dev/null"
