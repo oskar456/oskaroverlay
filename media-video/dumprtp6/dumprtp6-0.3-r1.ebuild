@@ -5,8 +5,8 @@
 EAPI=5
 
 DESCRIPTION="Next generation RTP dump"
-HOMEPAGE="http://k5.sh.cvut.cz/~oskar/blog/index.php?m=01&y=09&entry=entry090116-145531"
-SRC_URI="http://k5.sh.cvut.cz/~oskar/stah/${P}.tar.bz2"
+HOMEPAGE="https://github.com/oskar456/dumprtp6"
+SRC_URI="https://github.com/oskar456/dumprtp6/releases/download/v${PV}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
