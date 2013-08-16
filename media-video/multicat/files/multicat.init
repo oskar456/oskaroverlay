@@ -1,0 +1,38 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+CHANNEL="${SVCNAME#*.}"
+PIDPATH=/var/run/multicat
+PIDFILE=${PIDPATH}/${CHANNEL}.pid
+COMMAND=/usr/bin/multicat
+
+depend() {
+	need net
+}
+
+start() {
+	if [ "${SVCNAME}" = "multicat" ]; then
+		eerror "You are not supposed to run this script directly. Create a symlink"
+		eerror "multicat.channel for the channel you want to run."
+		return 1
+	fi
+
+	if [ -z "${MULTICAT_CMDLINE}" ]; then
+		eerror "You must specify MULTICAT_CMDLINE in /etc/conf.d/${SVCNAME}"
+		return 1
+	fi
+
+	checkpath -q -d -m 700 -o multicat:multicat ${PIDPATH}
+	ebegin "Starting multicat for channel ${CHANNEL}"
+	start-stop-daemon --start --pidfile ${PIDFILE} --background --make-pidfile \
+			  --user multicat:multicat --exec ${COMMAND} -- ${MULTICAT_CMDLINE}
+	eend ${?}
+}
+
+stop() {
+	ebegin "Stopping multicat for channel ${CHANNEL}"
+	start-stop-daemon --stop --pidfile ${PIDFILE}
+	eend ${?}
+}
