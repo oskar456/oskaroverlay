@@ -7,6 +7,8 @@ INSTANCE="${SVCNAME#*.}"
 PIDPATH=/var/run/dvblast
 PIDFILE=${PIDPATH}/${INSTANCE}.pid
 COMMAND=/usr/bin/dvblast
+USER="nobody:video"
+REMOTE="/var/run/dvblast/${INSTANCE}.sock"
 
 depend() {
 	need net
@@ -19,15 +21,15 @@ start() {
 		return 1
 	fi
 
-	if [ -z "${dvblast_CMDLINE}" ]; then
-		eerror "You must specify dvblast_CMDLINE in /etc/conf.d/${SVCNAME}"
+	if [ -z "${DVBLAST_CMDLINE}" ]; then
+		eerror "You must specify DVBLAST_CMDLINE in /etc/conf.d/${SVCNAME}"
 		return 1
 	fi
 
-	checkpath -q -d -m 700 -o nobody:nobody ${PIDPATH}
+	checkpath -q -d -m 700 -o ${USER} ${PIDPATH}
 	ebegin "Starting dvblast instance ${INSTANCE}"
 	start-stop-daemon --start --pidfile ${PIDFILE} --background --make-pidfile \
-			  --user nobody:nobody --exec ${COMMAND} -- ${dvblast_CMDLINE}
+	       --user ${USER} --exec ${COMMAND} -- -r ${REMOTE} ${DVBLAST_CMDLINE}
 	eend ${?}
 }
 
