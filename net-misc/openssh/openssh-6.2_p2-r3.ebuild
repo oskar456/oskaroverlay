@@ -1,6 +1,6 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-6.2_p1.ebuild,v 1.2 2013/03/30 04:29:24 radhermit Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-misc/openssh/openssh-6.2_p2-r3.ebuild,v 1.1 2013/07/21 10:02:17 radhermit Exp $
 
 EAPI="4"
 inherit eutils user flag-o-matic multilib autotools pam systemd versionator
@@ -9,9 +9,9 @@ inherit eutils user flag-o-matic multilib autotools pam systemd versionator
 # and _p? releases.
 PARCH=${P/_}
 
-HPN_PATCH="${PARCH/6.2/6.1}-hpn13v14.diff.bz2"
-#LDAP_PATCH="${PARCH/-/-lpk-}-0.3.14.patch.gz"
-X509_VER="7.4.1" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
+HPN_PATCH="${PARCH}-hpn13v14-r1.diff.bz2"
+LDAP_PATCH="${PARCH/-/-lpk-}-0.3.14.patch.gz"
+X509_VER="7.5" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="http://www.openssh.org/"
@@ -23,7 +23,7 @@ SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
 
 LICENSE="BSD GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~arm-linux ~x86-linux"
 IUSE="bindist ${HPN_PATCH:++}hpn kerberos ldap ldns libedit pam selinux skey static tcpd X X509"
 
 LIB_DEPEND="selinux? ( >=sys-libs/libselinux-1.28[static-libs(+)] )
@@ -65,7 +65,7 @@ S=${WORKDIR}/${PARCH}
 pkg_setup() {
 	# this sucks, but i'd rather have people unable to `emerge -u openssh`
 	# than not be able to log in to their server any more
-	maybe_fail() { [[ -z ${!2} ]] && echo ${1} ; }
+	maybe_fail() { [[ -z ${!2} ]] && echo "$1" ; }
 	local fail="
 		$(use X509 && maybe_fail X509 X509_PATCH)
 		$(use ldap && maybe_fail ldap LDAP_PATCH)
@@ -89,7 +89,7 @@ save_version() {
 
 src_prepare() {
 	sed -i \
-		-e '/_PATH_XAUTH/s:/usr/X11R6/bin/xauth:${EPREFIX}/usr/bin/xauth:' \
+		-e "/_PATH_XAUTH/s:/usr/X11R6/bin/xauth:${EPREFIX}/usr/bin/xauth:" \
 		pathnames.h || die
 	# keep this as we need it to avoid the conflict between LPK and HPN changing
 	# this file.
@@ -110,10 +110,10 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-5.9_p1-sshd-gssapi-multihomed.patch #378361
 	if use X509 ; then
 		pushd .. >/dev/null
-		epatch "${FILESDIR}"/${PN}-6.2_p1-x509-glue.patch
+		epatch "${FILESDIR}"/${PN}-6.2_p2-x509-glue.patch
 		popd >/dev/null
 		epatch "${WORKDIR}"/${X509_PATCH%.*}
-		epatch "${FILESDIR}"/${PN}-6.2_p1-x509-hpn-glue.patch
+		epatch "${FILESDIR}"/${PN}-6.2_p2-x509-hpn-glue.patch
 		save_version X509
 	fi
 	if ! use X509 ; then
@@ -129,19 +129,6 @@ src_prepare() {
 		epatch "${WORKDIR}"/${HPN_PATCH%.*}
 		epatch "${FILESDIR}"/${PN}-6.0_p1-hpn-progressmeter.patch
 		save_version HPN
-		# The AES-CTR multithreaded variant is broken, and causes random hangs
-		# when combined background threading and control sockets. To avoid
-		# this, we change the internal table to use the non-multithread version
-		# for the meantime. Do NOT remove this in new versions. See bug #354113
-		# comment #6 for testcase.
-		# Upstream reference: http://www.psc.edu/networking/projects/hpn-ssh/
-		## Additionally, the MT-AES-CTR mode cipher replaces the default ST-AES-CTR mode
-		## cipher. Be aware that if the client process is forked using the -f command line
-		## option the process will hang as the parent thread gets 'divorced' from the key
-		## generation threads. This issue will be resolved as soon as possible
-		sed -i -r \
-			-e 's:(aes(...)-ctr.*SSH_CIPHER_SSH2.*)evp_aes_ctr_mt:\1EVP_aes_\2_ctr:' \
-			cipher.c || die
 	fi
 
 	tc-export PKG_CONFIG
@@ -153,6 +140,8 @@ src_prepare() {
 		-e 's:-D_FORTIFY_SOURCE=2::'
 	)
 	sed -i "${sed_args[@]}" configure{,.ac} || die
+
+	epatch_user #473004
 
 	# Now we can build a sane merged version.h
 	(
