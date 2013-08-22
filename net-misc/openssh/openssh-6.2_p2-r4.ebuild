@@ -9,7 +9,7 @@ inherit eutils user flag-o-matic multilib autotools pam systemd versionator
 # and _p? releases.
 PARCH=${P/_}
 
-HPN_PATCH="${PARCH}-hpn13v14-r1.diff.bz2"
+HPN_PATCH="${PARCH}-hpn14v1.diff.gz"
 LDAP_PATCH="${PARCH/-/-lpk-}-0.3.14.patch.gz"
 X509_VER="7.5" X509_PATCH="${PARCH}+x509-${X509_VER}.diff.gz"
 
@@ -127,7 +127,6 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-4.7_p1-GSSAPI-dns.patch #165444 integrated into gsskex
 	if [[ -n ${HPN_PATCH} ]] && use hpn; then
 		epatch "${WORKDIR}"/${HPN_PATCH%.*}
-		epatch "${FILESDIR}"/${PN}-6.0_p1-hpn-progressmeter.patch
 		save_version HPN
 	fi
 
