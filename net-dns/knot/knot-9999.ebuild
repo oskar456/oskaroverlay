@@ -8,17 +8,17 @@ inherit eutils autotools user git-2
 
 DESCRIPTION="High-performance authoritative-only DNS server"
 HOMEPAGE="http://www.knot-dns.cz/"
-EGIT_REPO_URI="https://gitlab.labs.nic.cz/${PN}.git"
+EGIT_REPO_URI="https://gitlab.labs.nic.cz/labs/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="debug caps-ng +fastparser"
+IUSE="debug caps +fastparser"
 
 RDEPEND="
 	dev-libs/openssl
 	dev-libs/userspace-rcu
-	caps-ng? ( sys-libs/libcap-ng )
+	caps? ( sys-libs/libcap-ng )
 "
 #	sys-libs/glibc
 DEPEND="${RDEPEND}
@@ -29,9 +29,6 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	sed -i \
-		-e 's:-Werror::g' \
-		configure.ac || die
 	eautoreconf
 }
 
