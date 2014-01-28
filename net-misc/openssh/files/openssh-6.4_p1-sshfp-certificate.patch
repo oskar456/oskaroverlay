@@ -1,0 +1,68 @@
+From b48f8473a08dc3b96e1ad36a226e679f2b27ff7d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Caletka?= <ondrej@caletka.cz>
+Date: Tue, 28 Jan 2014 12:32:21 +0100
+Subject: [PATCH 3/5] Check for SSHFP when certificate is offered
+
+When the sshd offer a certificate to client (which is default, when such
+a certificate is configured), the client matches SSHFP records
+against the public key embedded in the certificate.
+---
+ sshconnect.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/sshconnect.c b/sshconnect.c
+index 483eb85..d0f99a0 100644
+--- a/sshconnect.c
++++ b/sshconnect.c
+@@ -1133,6 +1133,7 @@ fail:
+ int
+ verify_host_key(char *host, struct sockaddr *hostaddr, Key *host_key)
+ {
++	Key *raw_key = host_key;
+ 	int flags = 0;
+ 	char *fp;
+ 
+@@ -1140,23 +1141,31 @@ verify_host_key(char *host, struct sockaddr *hostaddr, Key *host_key)
+ 	debug("Server host key: %s %s", key_type(host_key), fp);
+ 	free(fp);
+ 
+-	/* XXX certs are not yet supported for DNS */
+-	if (!key_is_cert(host_key) && options.verify_host_key_dns &&
+-	    verify_host_key_dns(host, hostaddr, host_key, &flags) == 0) {
++	/* certs are not yet supported for DNS - check instead for key FP */
++	if (options.verify_host_key_dns && key_is_cert(host_key)) {
++		raw_key = key_from_private(host_key);
++		if (key_drop_cert(raw_key) != 0)
++			fatal("Couldn't drop certificate");
++	}
++	if (options.verify_host_key_dns &&
++	    verify_host_key_dns(host, hostaddr, raw_key, &flags) == 0) {
+ 		if (flags & DNS_VERIFY_FOUND) {
+ 
+-			if (options.verify_host_key_dns == 1 &&
+-			    flags & DNS_VERIFY_MATCH &&
+-			    flags & DNS_VERIFY_SECURE)
+-				return 0;
+-
+ 			if (flags & DNS_VERIFY_MATCH) {
+ 				matching_host_key_dns = 1;
+ 			} else {
+-				warn_changed_key(host_key);
++				warn_changed_key(raw_key);
+ 				error("Update the SSHFP RR in DNS with the new "
+ 				    "host key to get rid of this message.");
+ 			}
++
++			if (raw_key != host_key)
++				key_free(raw_key);
++
++			if (options.verify_host_key_dns == 1 &&
++			    flags & DNS_VERIFY_MATCH &&
++			    flags & DNS_VERIFY_SECURE)
++				return 0;
+ 		}
+ 	}
+ 
+-- 
+1.8.3.2
+
