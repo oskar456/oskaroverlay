@@ -1,27 +1,28 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-dns/knot/knot-1.4.0.ebuild,v 1.1 2014/01/09 18:04:02 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-dns/knot/knot-1.4.6.ebuild,v 1.1 2014/05/27 13:28:32 scarabeus Exp $
 
 EAPI=5
 
 EGIT_REPO_URI="https://gitlab.labs.nic.cz/labs/${PN}.git"
-[[ ${PV} == 9999 ]] && inherit git-r3
-inherit eutils user autotools
+[[ ${PV} == 9999 ]] && inherit autotools git-r3
+inherit eutils user
 
 DESCRIPTION="High-performance authoritative-only DNS server"
 HOMEPAGE="http://www.knot-dns.cz/"
-[[ ${PV} == 9999 ]] || SRC_URI="http://public.nic.cz/files/knot-dns/${P/_/-}.tar.gz"
+[[ ${PV} == 9999 ]] || SRC_URI="https://secure.nic.cz/files/knot-dns/${P/_/-}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 [[ ${PV} == 9999 ]] || \
 KEYWORDS="~amd64 ~x86"
-IUSE="debug caps +fastparser"
+IUSE="debug caps +fastparser idn"
 
 RDEPEND="
 	dev-libs/openssl
 	dev-libs/userspace-rcu
 	caps? ( sys-libs/libcap-ng )
+	idn? ( net-dns/libidn )
 "
 #	sys-libs/glibc
 DEPEND="${RDEPEND}
@@ -34,8 +35,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${P/_/-}"
 
 src_prepare() {
-	sed -i '/$(INSTALL) -d $(DESTDIR)\/@run_dir@/ d' src/Makefile.am
-	eautoreconf
+	[[ ${PV} == 9999 ]] && eautoreconf
 }
 
 src_configure() {
@@ -46,7 +46,8 @@ src_configure() {
 		--enable-recvmmsg \
 		$(use_enable fastparser) \
 		$(use_enable debug debug server,zones,xfr,packet,dname,rr,ns,hash,compiler) \
-		$(use_enable debug debuglevel details)
+		$(use_enable debug debuglevel details) \
+		$(use_with idn libidn)
 }
 
 src_install() {
