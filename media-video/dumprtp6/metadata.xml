@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>ondrej@caletka.cz</email>
+	</maintainer>
+	<longdescription lang="en">
+		This is a replace of dumprtp program, found in project DVBtools It's main purpose is to dump media stream, received from multicast RTP/UDP, or UDP only stream to standard output or file.
+	</longdescription>
+</pkgmetadata>
