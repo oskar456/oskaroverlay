@@ -1,21 +1,20 @@
-	# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
 EAPI=6
 
 VALA_MIN_API_VERSION="0.26"
 VALA_MAX_API_VERSION="0.32" # fix sed line if you increase this
 
-inherit vala cmake-utils git-r3
+inherit vala cmake-utils
 
 DESCRIPTION="Presenter console with multi-monitor support for PDF files"
 HOMEPAGE="http://pdfpc.github.io"
-EGIT_REPO_URI="https://github.com/${PN}/${PN}.git"
+SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="gstreamer"
 
 RDEPEND="app-text/poppler:=[cairo]
