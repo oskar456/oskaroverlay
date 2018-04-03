@@ -4,8 +4,8 @@
 
 EAPI=5
 
-DESCRIPTION="Simple and powerful MPEG-2/TS demux and streaming application."
-HOMEPAGE="https://www.videolan.org/projects/dvblast.html"
+DESCRIPTION="Multicast MPEG-2 Transport Streams swiss army knife."
+HOMEPAGE="https://www.videolan.org/projects/multicat.html"
 SRC_URI="https://get.videolan.org/${PN}/${PV}/${P}.tar.bz2"
 
 LICENSE="GPL-2"
@@ -13,9 +13,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=">=media-video/bitstream-1.0
-	>=sys-kernel/linux-headers-3.1
-	dev-libs/libev"
+DEPEND=">=media-video/bitstream-1.3"
 RDEPEND=""
 
 src_configure() {
@@ -24,5 +22,5 @@ src_configure() {
 
 src_install() {
 	default
-	newinitd "${FILESDIR}/${PN}.init" ${PN}
+	newinitd "${FILESDIR}/multicat.init" multicat
 }
