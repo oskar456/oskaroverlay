@@ -4,8 +4,8 @@
 
 EAPI=6
 
-VALA_MIN_API_VERSION="0.26"
-VALA_MAX_API_VERSION="0.32" # fix sed line if you increase this
+VALA_MIN_API_VERSION="0.34"
+VALA_MAX_API_VERSION="0.36" # fix sed line if you increase this
 
 inherit vala cmake-utils git-r3
 
@@ -25,13 +25,13 @@ RDEPEND="app-text/poppler:=[cairo]
 	gstreamer? ( media-libs/gstreamer:1.0
 	media-libs/gst-plugins-base:1.0 )
 	sys-apps/dbus
-	x11-libs/gtk+:3"
+	>=x11-libs/gtk+-3.22.0:3"
 DEPEND="${RDEPEND}
 	$(vala_depend)"
 
 src_prepare() {
 	default
-	sed -i -e "s/valac-0.20/valac-0.32 valac-0.30 valac-0.28 valac-0.26/" cmake/vala/FindVala.cmake || die
+	sed -i -e "s/valac/valac valac-0.36 valac-0.34/" cmake/vala/FindVala.cmake || die
 	vala_src_prepare
 }
 
