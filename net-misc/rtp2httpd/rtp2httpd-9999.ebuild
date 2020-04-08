@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils autotools git-2
+inherit eutils autotools git-r3
 
 DESCRIPTION="Multicast RTP to Unicast HTTP stream convertor"
 HOMEPAGE="https://github.com/oskar456/rtp2httpd"

@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit git-2
+inherit git-r3
 
 DESCRIPTION="Simple and powerful MPEG-2/TS demux and streaming application."
 HOMEPAGE="http://www.videolan.org/projects/dvblast.html"

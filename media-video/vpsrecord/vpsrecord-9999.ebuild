@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils autotools git-2
+inherit eutils autotools git-r3
 
 DESCRIPTION="Digital PDC/VPS analyzer/recorder"
 HOMEPAGE="https://github.com/oskar456/vpsrecord"

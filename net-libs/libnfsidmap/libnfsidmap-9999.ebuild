@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit autotools eutils git-2
+inherit autotools eutils git-r3
 
 DESCRIPTION="NFSv4 ID <-> name mapping library"
 HOMEPAGE="http://www.citi.umich.edu/projects/nfsv4/linux/"
