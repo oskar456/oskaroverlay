@@ -9,5 +9,8 @@
       <name>Ondrej Caletka</name>
     </owner>
     <source type="git">https://github.com/oskar456/oskaroverlay.git</source>
+    <source type="git">https://github.com/oskar456/oskaroverlay.git</source>
+    <source type="git">git+ssh://git@github.com/oskar456/oskaroverlay.git</source>
+    <feed>https://github.com/oskar456/oskaroverlay/commits/master.atom</feed>
   </repo>
 </repositories>
