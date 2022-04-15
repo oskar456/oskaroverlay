@@ -8,6 +8,6 @@
       <email>ondrej@caletka.cz</email>
       <name>Ondrej Caletka</name>
     </owner>
-    <source type="git">git://github.com/oskar456/oskaroverlay.git</source>
+    <source type="git">https://github.com/oskar456/oskaroverlay.git</source>
   </repo>
 </repositories>
